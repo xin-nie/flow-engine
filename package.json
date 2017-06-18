@@ -5,7 +5,11 @@
   "repository": "git@github.com:xin-nie/flow-engine.git",
   "author": "xin.nie <xin.nie@goeuro.com>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "colors": "^1.1.2",
+    "install": "^0.10.1",
+    "util.promisify": "^1.0.0"
+  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-jest": "^20.0.3",
