@@ -10,6 +10,7 @@
     "babel-cli": "^6.24.1",
     "babel-jest": "^20.0.3",
     "babel-preset-latest-minimal": "^1.1.2",
+    "babel-preset-stage-3": "^6.24.1",
     "eslint": "^4.0.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.3.0",
@@ -17,7 +18,8 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^20.0.4",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "regenerator-runtime": "^0.10.5"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -26,6 +28,7 @@
     "build:prod": "babel src -d dist",
     "serve": "node dist/index.js",
     "test": "yarn run lint && jest",
+    "test:watch": "yarn run jest -- --watch",
     "lint": "eslint src"
   }
 }
