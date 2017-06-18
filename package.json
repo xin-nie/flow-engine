@@ -1,0 +1,24 @@
+{
+  "name": "flow-engine",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:xin-nie/flow-engine.git",
+  "author": "xin.nie <xin.nie@goeuro.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-jest": "^20.0.3",
+    "babel-preset-latest-minimal": "^1.1.2",
+    "jest": "^20.0.4",
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "start": "nodemon src/index.js --exec babel-node",
+    "build": "yarn run clean && yarn run build:app",
+    "build:app": "babel src -d dist",
+    "serve": "node dist/index.js",
+    "test": "jest"
+  }
+}
