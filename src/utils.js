@@ -1,4 +1,5 @@
 import fs from 'fs'
+import colors from 'colors'
 import promisify from 'util.promisify'
 
 export const isEmpty = collection => {
@@ -19,7 +20,7 @@ export const isEmpty = collection => {
   throw new Error('collection must be either array or object')
 }
 
-export async function getRuleList (path) {
+export async function loadRuleList (path) {
   const readFileAsyc = promisify(fs.readFile)
 
   try {
@@ -30,16 +31,31 @@ export async function getRuleList (path) {
   }
 }
 
-/**
- * Transfer an array of rules to a hash table indexing by id
- * in order to have O(1) search for each rule object
- */
-export const normalizer = rules =>
-  !isEmpty(rules) &&
-  rules.reduce((res, rule) => ({ ...res, [rule.id]: rule }), {})
+// Transfer an array of rules to a hash table indexing by id
+export const getHashTable = ruleList =>
+  !isEmpty(ruleList) &&
+  ruleList.reduce((res, rule) => ({ ...res, [rule.id]: rule }), {})
+
+export const print = (evaluation, target) => {
+  if (isEmpty(evaluation)) {
+    return null
+  }
+
+  console.log(colors.blue(`START - ${JSON.stringify(target)}`))
+
+  evaluation.forEach(
+    rule =>
+      (rule.result
+        ? console.log(colors.green(`Rule "${rule.title}" passed - ${rule.rule}`))
+        : console.log(colors.red(`Rule "${rule.title}" failed - ${rule.rule}`)))
+  )
+
+  console.log(colors.blue('END.\n'))
+}
 
 export default {
+  print,
   isEmpty,
-  normalizer,
-  getRuleList
+  getHashTable,
+  loadRuleList
 }

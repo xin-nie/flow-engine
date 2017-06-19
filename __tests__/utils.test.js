@@ -1,33 +1,33 @@
 import fs from 'fs'
 import promisify from 'util.promisify'
-import { isEmpty, normalizer, getRuleList } from '../src/utils'
+import { isEmpty, getHashTable, loadRuleList, print } from '../src/utils'
 
 describe('utils', () => {
   describe('isEmpty', () => {
-    test('should return true when object is empty', () => {
+    it('should return true when object is empty', () => {
       expect(isEmpty({})).toBe(true)
     })
 
-    test('should return false when object is not empty', () => {
+    it('should return false when object is not empty', () => {
       expect(isEmpty({ a: 1 })).toBe(false)
     })
 
-    test('should return true when array is empty', () => {
+    it('should return true when array is empty', () => {
       expect(isEmpty([])).toBe(true)
     })
 
-    test('should return false when array is not empty', () => {
+    it('should return false when array is not empty', () => {
       expect(isEmpty([1])).toBe(false)
     })
 
-    test('should throw error when collection undefined', () => {
+    it('should throw error when collection undefined', () => {
       function passUndefine () {
         isEmpty()
       }
       expect(passUndefine).toThrow()
     })
 
-    test('should throw error when collection is not array or object', () => {
+    it('should throw error when collection is not array or object', () => {
       function passNumber () {
         isEmpty(1)
       }
@@ -35,7 +35,7 @@ describe('utils', () => {
     })
   })
 
-  describe('normalizer', () => {
+  describe('getHashTable', () => {
     let readFileAsyc, raw, rules
 
     beforeEach(async () => {
@@ -44,75 +44,101 @@ describe('utils', () => {
       rules = JSON.parse(raw)
     })
 
-    test('should return a object with key of rule id', () => {
+    it('should return a object with key of rule id', () => {
       const expectResult = {
         1: {
           id: '1',
           true_id: '2',
-          false_id: '3',
-          rule: 'function(obj) { return !!obj; }'
+          false_id: '5',
+          rule: 'function(obj) { return !!obj; }',
+          title: 'Check object not empty'
         },
         2: {
           id: '2',
-          false_id: '4',
-          rule: 'function(obj) { return obj.color === "red"; }'
+          false_id: '3',
+          rule: 'function(obj) { return obj.color === "red"; }',
+          title: 'Check color red'
         },
         3: {
           id: '3',
-          rule: 'function(obj) { return obj.color === "blue"; }'
+          true_id: '4',
+          rule: 'function(obj) { return !!obj.color; }',
+          title: 'Check color defined'
         },
         4: {
           id: '4',
-          rule: 'function(obj) { return !!obj.color; }'
+          rule: 'function(obj) { return obj.color === "blue"; }',
+          title: 'Check color blue'
+        },
+        5: {
+          id: '5',
+          rule: 'function(obj) { return obj === null; }',
+          title: 'Check object null'
         }
       }
-      const actualResult = normalizer(rules)
+      const actualResult = getHashTable(rules)
       expect(actualResult).toEqual(expectResult)
     })
 
-    test('should return null when rules are empty', () => {
-      expect(normalizer({})).toBe(false)
+    it('should return null when rules are empty', () => {
+      expect(getHashTable({})).toBe(false)
     })
 
-    test('should throw error if rules are undefined', () => {
+    it('should throw error if rules are undefined', () => {
       function passUndefine () {
-        normalizer()
+        getHashTable()
       }
       expect(passUndefine).toThrow()
     })
   })
 
-  describe('getRuleList', () => {
+  describe('loadRuleList', () => {
     it('should return a array of rule object', async () => {
       const path = `${__dirname}/../assets/simple.json`
       const expectResult = [
         {
           id: '1',
           true_id: '2',
-          false_id: '3',
-          rule: 'function(obj) { return !!obj; }'
+          false_id: '5',
+          rule: 'function(obj) { return !!obj; }',
+          title: 'Check object not empty'
         },
         {
           id: '2',
-          false_id: '4',
-          rule: 'function(obj) { return obj.color === "red"; }'
+          false_id: '3',
+          rule: 'function(obj) { return obj.color === "red"; }',
+          title: 'Check color red'
         },
         {
           id: '3',
-          rule: 'function(obj) { return obj.color === "blue"; }'
+          true_id: '4',
+          rule: 'function(obj) { return !!obj.color; }',
+          title: 'Check color defined'
         },
         {
           id: '4',
-          rule: 'function(obj) { return !!obj.color; }'
+          rule: 'function(obj) { return obj.color === "blue"; }',
+          title: 'Check color blue'
+        },
+        {
+          id: '5',
+          rule: 'function(obj) { return obj === null; }',
+          title: 'Check object null'
         }
       ]
-      const actualResult = await getRuleList(path)
+      const actualResult = await loadRuleList(path)
       expect(actualResult).toEqual(expectResult)
     })
 
     it('should throw error if wrong path', () => {
       const path = `./s.json`
-      getRuleList(path).catch(e => expect(e).toBeDefined())
+      loadRuleList(path).catch(e => expect(e).toBeDefined())
+    })
+  })
+
+  describe('print', () => {
+    it('should return null if evaluation list is empty', () => {
+      expect(print([])).toBe(null)
     })
   })
 })

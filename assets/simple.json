@@ -1,21 +1,31 @@
 [
   {
+    "title":"Check object not empty",
     "id":"1",
     "true_id":"2",
-    "false_id":"3",
+    "false_id":"5",
     "rule":"function(obj) { return !!obj; }"
   },
   {
+    "title":"Check color red",
     "id":"2",
-    "false_id":"4",
+    "false_id":"3",
     "rule":"function(obj) { return obj.color === \"red\"; }"
   },
   {
+    "title":"Check color defined",
     "id":"3",
+    "true_id":"4",
+    "rule":"function(obj) { return !!obj.color; }"
+  },
+  {
+    "title":"Check color blue",
+    "id":"4",
     "rule":"function(obj) { return obj.color === \"blue\"; }"
   },
   {
-    "id":"4",
-    "rule":"function(obj) { return !!obj.color; }"
+    "title":"Check object null",
+    "id":"5",
+    "rule":"function(obj) { return obj === null; }"
   }
 ]
