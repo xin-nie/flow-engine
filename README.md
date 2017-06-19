@@ -2,6 +2,12 @@
 
 A simple flow engine that evaluates rules against passing object.
 
+## Requirement
+
+node > 6.11
+
+yarn > 0.24
+
 ## Install
 
 Install yarn first:
